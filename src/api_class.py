@@ -49,11 +49,12 @@ class HH_api(All_api):
                 print("Error:", response.status_code)
                 print(f'Ошибка при выполнении запроса на странице {page}')
 
-        print(f"Кол-во вакансий с сайта HH.ru {len(all_vacancies)}")
+        print(f"По Вашему запросу найдено {len(all_vacancies)} вакансий на сайте headhunter.ru")
         # сохраняем полученные данные в файл
         with open('test_hh.json', 'w', encoding='utf-8') as f:
             json.dump(all_vacancies, f, ensure_ascii=False, indent=4)
 
+        return all_vacancies
 
 
 class SJ_api(All_api):
@@ -92,9 +93,10 @@ class SJ_api(All_api):
                 print("Error:", response.status_code)
                 print(f'Ошибка при выполнении запроса на странице {page}')
 
-        print(f"Кол-во вакансий с сайта superjob.ru {len(all_vacancies)}")
+        print(f"По Вашему запросу найдено {len(all_vacancies)} вакансий на сайте superjob.ru ")
 
         # сохраняем полученные данные в файл
         with open('test_sj.json', 'w', encoding='utf-8') as f:
             json.dump(all_vacancies, f, ensure_ascii=False, indent=4)
 
+        return all_vacancies
