@@ -125,36 +125,39 @@ class Vacancies:
 
     def __str__(self) -> str:
         """Строковое представление вакансии"""
-        return f'Вакансия в регионе {self.area}: {self.name}\n' \
+        return f'Id вакансии: {self.id}\n' \
+               f'Вакансия в регионе {self.area}: {self.name}\n' \
                f'Зарплата от {self.salary_min} до {self.salary_max} {self.currency}\n' \
                f'Требования к кандидату: {self.requirement}\n' \
                f'Описание вакансии: {self.responsibility}\n' \
-               f'Ссылка на вакансию: {self.url}\n' \
-               f'Id вакансии: {self.id}'
+               f'Ссылка на вакансию: {self.url}'
+
+    @classmethod
+    def __verify_data(cls, other):
+        if not isinstance(other, (int, Vacancies)):
+            raise TypeError('Операнд справа должен иметь тип int или Vacancies')
+
+        return other if isinstance(other, int) else other.salary_min
+
+    def __eq__(self, other):
+        sc = self.__verify_data(other)
+        return self.salary_min == sc
 
     def __gt__(self, other):
-        if isinstance(other, Vacancies):
-            return self.salary_min > other.salary_min
-        else:
-            return self.salary_min > other
+        sc = self.__verify_data(other)
+        return self.salary_min > sc
 
     def __ge__(self, other):
-        if isinstance(other, Vacancies):
-            return self.salary_min >= other.salary_min
-        else:
-            return self.salary_min >= other
+        sc = self.__verify_data(other)
+        return self.salary_min >= sc
 
     def __lt__(self, other):
-        if isinstance(other, Vacancies):
-            return self.salary_min < other.salary_min
-        else:
-            return self.salary_min < other
+        sc = self.__verify_data(other)
+        return self.salary_min < sc
 
     def __le__(self, other):
-        if isinstance(other, Vacancies):
-            return self.salary_min <= other.salary_min
-        else:
-            return self.salary_min <= other
+        sc = self.__verify_data(other)
+        return self.salary_min <= sc
 
     def reset(self):
         self.__all_vacancies = []

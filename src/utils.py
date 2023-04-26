@@ -22,7 +22,12 @@ def get_data_from(source, keyword, c_page):
 
 
 def get_user_answer(question, count):
-
+    """
+    Функция получения от пользователя целого числа, не более значения count.
+    :param question: Вопрос для пользователя.
+    :param count: Число ограниечение.
+    :return: Целое число.
+    """
     print(question)
     while True:
         n = input()
@@ -36,16 +41,22 @@ def get_user_answer(question, count):
             print("Ошибка! Введенное значение не является числом. Повторите ввод.")
 
 
-def get_n_for_top(data):
-
+def get_id(question, vacancies_list):
+    """
+    Функция получения от пользователя значения ID вакансии, присутствующее в массиве данных.
+    :param question: Вопрос задаваемы пользователю.
+    :param vacancies_list: Массив данных.
+    :return: Целое число
+    """
+    print(question)
     while True:
-        n = input(f'Введите число вакансий для вывода, не более {len(data)}\n')
+        n = input()
         if n.isdigit():
             n = int(n)
-            if 0 < n < len(data):
-                return n
-            else:
-                print(f"Ошибка! Введенное число должно быть от 1 до {len(data)}. Повторите ввод.")
+            for vacancy in vacancies_list:
+                if vacancy.id == n:
+                    return n
+            print("Ошибка! Вакансии с таким ID нет в списке. Повторите ввод.")
         else:
             print("Ошибка! Введенное значение не является числом. Повторите ввод.")
 
@@ -86,4 +97,46 @@ def get_filtered_by_responsibility(data: list, text: str) -> list:
         words_split = words.split()
         if text in words_split:
             filtered_data.append(x)
-    return filtered_data
+    if filtered_data:
+        print(f'По Вашему запросу найдено {len(filtered_data)} вакансий')
+    else:
+        print('Нет вакансий, соответствующих заданным критериям')
+
+    return filtered_data if len(filtered_data) > 0 else data
+
+
+def compare_vacancies_by_salary(vacancy_id_1: int, vacancy_id_2: int, vacancies_list) -> str:
+    """
+    Функция сравнения двух экземпляров класса вакансий по минимальной зарплате.
+    :param vacancy_id_1: ID первой вакансии для сравнения.
+    :param vacancy_id_2: ID второй вакансии для сравнения.
+    :param vacancies_list: список экземпляров класса вакансий.
+    :return: строку с результатом сравнения.
+    """
+    vacancy_1 = next((v for v in vacancies_list if v.id == vacancy_id_1), None)
+    vacancy_2 = next((v for v in vacancies_list if v.id == vacancy_id_2), None)
+
+    if not vacancy_1 or not vacancy_2:
+        return "Ошибка: одной из вакансий нет в списке"
+
+    if vacancy_1.salary_min is None or vacancy_2.salary_min is None:
+        return "Ошибка: одна или обе вакансии не имеют указанной минимальной зарплаты"
+
+    if vacancy_1.salary_min > vacancy_2.salary_min:
+        return f"Вакансия {vacancy_id_1} имеет большую минимальную зарплату, чем вакансия {vacancy_id_2}"
+    elif vacancy_1.salary_min < vacancy_2.salary_min:
+        return f"Вакансия {vacancy_id_2} имеет большую минимальную зарплату, чем вакансия {vacancy_id_1}"
+    else:
+        return f"Минимальная зарплата вакансии {vacancy_id_1} равна минимальной зарплате вакансии {vacancy_id_2}"
+
+
+def get_vacancy_by_id(vacancy_id: int, vacancies: list):
+    """
+    Функция возвращает вакансию по её ID.
+    :param vacancy_id: номер ID.
+    :param vacancies: список вакансий.
+    :return: словарь.
+    """
+    for vacancy in vacancies:
+        if vacancy.id == vacancy_id:
+            return vacancy

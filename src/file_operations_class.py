@@ -56,6 +56,7 @@ class Json_file_worker(File_worker):
         """
         self.vacancies = [v for v in self.vacancies if v.get('id') != vacancy_id]
         self.save()
+        return print('Вакансия успешно удалена.')
 
     def save(self):
         """
